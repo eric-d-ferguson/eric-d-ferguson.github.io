@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eric Ferguson</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <nav>
+    <span class="nav-logo">ef<span class="cursor">_</span></span>
+    <ul>
+      <li><a href="#about">about</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="hero">
+      <p class="prompt">~/hello</p>
+      <h1>Eric Ferguson<span class="blink">_</span></h1>
+      <p class="tagline"><!-- EDIT: your tagline / title here -->
+        software engineer &amp; builder of things
+      </p>
+      <div class="hero-links">
+        <a href="mailto:eric.d.ferguson@gmail.com" class="btn">email</a>
+        <a href="https://github.com/" target="_blank" rel="noopener" class="btn btn-outline">github</a>
+        <a href="https://linkedin.com/in/" target="_blank" rel="noopener" class="btn btn-outline">linkedin</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2><span class="section-prefix">//</span> about</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            <!-- EDIT: your bio here -->
+            Hey, I'm Eric. I build software and care about writing code that's clear,
+            fast, and maintainable. When I'm not at a keyboard I'm probably
+            <!-- EDIT: hobbies/interests -->
+            hiking, reading, or tinkering with something.
+          </p>
+          <p>
+            I'm currently <!-- EDIT: role/status, e.g. "open to new opportunities" or "working at Acme Co." -->
+            open to new opportunities.
+          </p>
+        </div>
+        <div class="skills">
+          <p class="skills-label">things I work with</p>
+          <ul class="tag-list">
+            <!-- EDIT: your stack -->
+            <li>TypeScript</li>
+            <li>Python</li>
+            <li>React</li>
+            <li>Node.js</li>
+            <li>PostgreSQL</li>
+            <li>Docker</li>
+            <li>AWS</li>
+            <li>Linux</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2><span class="section-prefix">//</span> projects</h2>
+      <div class="project-grid">
+
+        <!-- EDIT: replace with your real projects -->
+        <article class="project-card">
+          <div class="project-header">
+            <span class="project-name">project-alpha</span>
+            <div class="project-links">
+              <a href="#" target="_blank" rel="noopener">code ↗</a>
+              <a href="#" target="_blank" rel="noopener">live ↗</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            A short description of what this project does and why it's interesting.
+            What problem does it solve?
+          </p>
+          <ul class="tag-list small">
+            <li>TypeScript</li>
+            <li>React</li>
+            <li>PostgreSQL</li>
+          </ul>
+        </article>
+
+        <article class="project-card">
+          <div class="project-header">
+            <span class="project-name">project-beta</span>
+            <div class="project-links">
+              <a href="#" target="_blank" rel="noopener">code ↗</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            Another project description. Keep it to two or three sentences max.
+            What's the cool part?
+          </p>
+          <ul class="tag-list small">
+            <li>Python</li>
+            <li>Docker</li>
+            <li>AWS</li>
+          </ul>
+        </article>
+
+        <article class="project-card">
+          <div class="project-header">
+            <span class="project-name">project-gamma</span>
+            <div class="project-links">
+              <a href="#" target="_blank" rel="noopener">code ↗</a>
+              <a href="#" target="_blank" rel="noopener">live ↗</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            Third project. Describe the tech challenge you tackled or the
+            impact it had.
+          </p>
+          <ul class="tag-list small">
+            <li>Go</li>
+            <li>Redis</li>
+            <li>gRPC</li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2><span class="section-prefix">//</span> contact</h2>
+      <p>
+        Best way to reach me is email. I'm also active on GitHub and LinkedIn.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:eric.d.ferguson@gmail.com">eric.d.ferguson@gmail.com</a>
+        <a href="https://github.com/" target="_blank" rel="noopener">github.com/<!-- EDIT --></a>
+        <a href="https://linkedin.com/in/" target="_blank" rel="noopener">linkedin.com/in/<!-- EDIT --></a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>eric ferguson · <span id="year"></span></span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
