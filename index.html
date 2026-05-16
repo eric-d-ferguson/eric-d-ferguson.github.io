@@ -17,7 +17,6 @@
     <span class="nav-logo">ef<span class="cursor">_</span></span>
     <ul>
       <li><a href="#about">about</a></li>
-      <li><a href="#projects">projects</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
   </nav>
@@ -72,71 +71,6 @@
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects">
-      <h2><span class="section-prefix">//</span> projects</h2>
-      <div class="project-grid">
-
-        <!-- EDIT: replace with your real projects -->
-        <article class="project-card">
-          <div class="project-header">
-            <span class="project-name">project-alpha</span>
-            <div class="project-links">
-              <a href="#" target="_blank" rel="noopener">code ↗</a>
-              <a href="#" target="_blank" rel="noopener">live ↗</a>
-            </div>
-          </div>
-          <p class="project-desc">
-            A short description of what this project does and why it's interesting.
-            What problem does it solve?
-          </p>
-          <ul class="tag-list small">
-            <li>TypeScript</li>
-            <li>React</li>
-            <li>PostgreSQL</li>
-          </ul>
-        </article>
-
-        <article class="project-card">
-          <div class="project-header">
-            <span class="project-name">project-beta</span>
-            <div class="project-links">
-              <a href="#" target="_blank" rel="noopener">code ↗</a>
-            </div>
-          </div>
-          <p class="project-desc">
-            Another project description. Keep it to two or three sentences max.
-            What's the cool part?
-          </p>
-          <ul class="tag-list small">
-            <li>Python</li>
-            <li>Docker</li>
-            <li>AWS</li>
-          </ul>
-        </article>
-
-        <article class="project-card">
-          <div class="project-header">
-            <span class="project-name">project-gamma</span>
-            <div class="project-links">
-              <a href="#" target="_blank" rel="noopener">code ↗</a>
-              <a href="#" target="_blank" rel="noopener">live ↗</a>
-            </div>
-          </div>
-          <p class="project-desc">
-            Third project. Describe the tech challenge you tackled or the
-            impact it had.
-          </p>
-          <ul class="tag-list small">
-            <li>Go</li>
-            <li>Redis</li>
-            <li>gRPC</li>
-          </ul>
-        </article>
-
-      </div>
-    </section>
-
     <!-- CONTACT -->
     <section id="contact">
       <h2><span class="section-prefix">//</span> contact</h2>
@@ -157,5 +91,14 @@
   </footer>
 
   <script src="script.js"></script>
+
+  <!-- you found it -->
+  <div class="game-shell">
+    <p class="game-label">~/deep-sea<span class="blink">_</span></p>
+    <canvas id="fish-game"></canvas>
+    <p class="game-hint">↑↓ / w·s to move &nbsp;·&nbsp; dodge jellyfish, mines &amp; coral &nbsp;·&nbsp; collect the green <span class="game-food-hint">·:·</span> for bonus points</p>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
