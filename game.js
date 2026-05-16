@@ -230,17 +230,22 @@
     ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   }
 
-  function drawOverlay(title, sub) {
+  function drawOverlay(title, sub, note) {
     ctx.fillStyle = 'rgba(7,9,16,0.78)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     const cx = canvas.width / 2, cy = canvas.height / 2;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.font = 'bold 14px JetBrains Mono, monospace';
     ctx.fillStyle = C.cyan;
-    ctx.fillText(title, cx, cy - 16);
+    ctx.fillText(title, cx, cy - 22);
     ctx.font = '11px JetBrains Mono, monospace';
     ctx.fillStyle = C.muted;
-    ctx.fillText(sub, cx, cy + 8);
+    ctx.fillText(sub, cx, cy + 2);
+    if (note) {
+      ctx.font = '10px JetBrains Mono, monospace';
+      ctx.fillStyle = C.purple;
+      ctx.fillText(note, cx, cy + 22);
+    }
     ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   }
 
@@ -344,7 +349,8 @@
     if (state === 'dead' && particles.length === 0) {
       drawOverlay(
         `> score  ${String(Math.floor(score)).padStart(5, '0')}`,
-        '[ space · enter · tap ] to try again'
+        '[ space · enter · tap ] to try again',
+        `your high score: ${String(Math.floor(hiScore)).padStart(5, '0')}  ·  lindy's best: 1,238`
       );
     }
 
