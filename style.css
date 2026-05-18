@@ -294,11 +294,27 @@ footer {
   nav ul { gap: 1.25rem; }
 }
 
+/* ── Phish easter egg tag ── */
+#phish-tag {
+  cursor: pointer;
+  user-select: none;
+}
+
 /* ── Hidden game ── */
 .game-shell {
   max-width: var(--max);
-  margin: 60vh auto 0;
-  padding: 0 clamp(1.25rem, 5vw, 3rem) 6rem;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 5vw, 3rem);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease, max-height 0.7s ease, padding 0.5s ease;
+}
+
+.game-shell.revealed {
+  max-height: 900px;
+  opacity: 1;
+  padding-bottom: 6rem;
 }
 
 .game-label {

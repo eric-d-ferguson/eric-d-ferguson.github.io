@@ -21,6 +21,19 @@ const observer = new IntersectionObserver(
 
 sections.forEach((s) => observer.observe(s));
 
+// Phish tag easter egg — click to reveal the game
+const phishTag = document.getElementById('phish-tag');
+const gameShell = document.querySelector('.game-shell');
+
+if (phishTag && gameShell) {
+  phishTag.addEventListener('click', () => {
+    gameShell.classList.add('revealed');
+    setTimeout(() => {
+      gameShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  });
+}
+
 // Subtle typewriter effect on the hero tagline — runs once on load
 const tagline = document.querySelector('.tagline');
 if (tagline) {

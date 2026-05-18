@@ -15,7 +15,7 @@
     purple: '#c084fc',
     coral:  '#f87171',
     mine:   '#94a3b8',
-    food:   '#4ade80',
+    food:   '#cc2200',
   };
 
   // ── Sprites ───────────────────────────────────────────────────────────────
@@ -70,7 +70,7 @@
 
   // ── Sprites: food ─────────────────────────────────────────────────────────
   // Animated with two frames
-  const FOOD_FRAMES = [['·:·'], [':·:']];
+  const FOOD_FRAMES = null; // unused — food drawn via canvas
   const FOOD_R = 10; // collect radius
 
   // ── State ─────────────────────────────────────────────────────────────────
@@ -83,6 +83,7 @@
   let food      = [];
   let particles = [];
   let bubbles   = [];
+  let popups    = [];
 
   const FISH_R = 11;
   const fish   = { x: 80, y: 0, vy: 0 };
@@ -90,11 +91,28 @@
   // ── Input ─────────────────────────────────────────────────────────────────
   const keys = {};
   let touchDir = 0;
+  const turbo = {
+    up:   { count: 1, last: 0 },
+    down: { count: 1, last: 0 },
+  };
+  const TURBO_WINDOW = 280;
 
   document.addEventListener('keydown', (e) => {
     keys[e.code] = true;
     if ((e.code === 'Space' || e.code === 'Enter') && state !== 'playing') startGame();
     if (['ArrowUp', 'ArrowDown', 'Space'].includes(e.code) && state === 'playing') e.preventDefault();
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
+      const now = Date.now();
+      turbo.up.count = now - turbo.up.last < TURBO_WINDOW ? Math.min(3, turbo.up.count + 1) : 1;
+      turbo.up.last  = now;
+      turbo.down.count = 1;
+    }
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+      const now = Date.now();
+      turbo.down.count = now - turbo.down.last < TURBO_WINDOW ? Math.min(3, turbo.down.count + 1) : 1;
+      turbo.down.last  = now;
+      turbo.up.count = 1;
+    }
   });
   document.addEventListener('keyup', (e) => { keys[e.code] = false; });
 
@@ -113,6 +131,7 @@
     obstacles = [];
     food      = [];
     particles = [];
+    popups    = [];
     score     = 0;
     frame     = 0;
     speed     = 2.6;
@@ -153,24 +172,95 @@
   }
 
   // ── Food ──────────────────────────────────────────────────────────────────
+  const DONUT_SIZES = [
+    { outer: 5,  inner: 2, points: 75,  r: 6  },
+    { outer: 9,  inner: 4, points: 25,  r: 10 },
+    { outer: 15, inner: 6, points: 10,  r: 16 },
+  ];
+
   function spawnFood() {
     const pad = 40;
+    const size = Math.floor(Math.random() * 3);
     food.push({
       x: canvas.width + 30,
       y: pad + Math.random() * (canvas.height - pad * 2),
       t: 0,
+      size,
       collected: false,
     });
   }
 
   function drawFood(f) {
-    const lines = FOOD_FRAMES[Math.floor(f.t / 18) % 2];
-    ctx.font = FONT;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    const { outer, inner } = DONUT_SIZES[f.size];
+    const bob = Math.sin(f.t * 0.1) * 2;
+    const x = f.x;
+    const y = f.y + bob;
+
+    ctx.beginPath();
+    ctx.arc(x, y, outer, 0, Math.PI * 2);
     ctx.fillStyle = C.food;
-    ctx.fillText(lines[0], f.x, f.y);
-    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(x, y, inner, 0, Math.PI * 2);
+    ctx.fillStyle = C.bg;
+    ctx.fill();
+  }
+
+  function drawFish(x, y, t, dead) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    // tail wag
+    const wag = dead ? 0 : Math.sin(t * 0.18) * 0.35;
+    ctx.save();
+    ctx.rotate(wag);
+    ctx.beginPath();
+    ctx.moveTo(-10, 0);
+    ctx.lineTo(-21, -9);
+    ctx.lineTo(-21, 9);
+    ctx.closePath();
+    ctx.fillStyle = '#991a00';
+    ctx.fill();
+    ctx.restore();
+
+    // body
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 12, 7, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#cc2200';
+    ctx.fill();
+
+    // dorsal fin
+    ctx.beginPath();
+    ctx.moveTo(-1, -7);
+    ctx.lineTo(4, -13);
+    ctx.lineTo(8, -7);
+    ctx.closePath();
+    ctx.fillStyle = '#991a00';
+    ctx.fill();
+
+    // eye white
+    ctx.beginPath();
+    ctx.arc(7, -1, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+
+    if (dead) {
+      // X eye
+      ctx.strokeStyle = '#1a0500';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(5.2, -2.8); ctx.lineTo(8.8, 0.8);
+      ctx.moveTo(8.8, -2.8); ctx.lineTo(5.2, 0.8);
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(7.5, -1, 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = '#1a0500';
+      ctx.fill();
+    }
+
+    ctx.restore();
   }
 
   // ── Particles ─────────────────────────────────────────────────────────────
@@ -227,6 +317,14 @@
     ctx.fillText(`score  ${String(Math.floor(score)).padStart(5, '0')}`, canvas.width - 14, 12);
     if (hiScore > 0)
       ctx.fillText(`best   ${String(Math.floor(hiScore)).padStart(5, '0')}`, canvas.width - 14, 30);
+
+    // point popups
+    popups.forEach((p, i) => {
+      ctx.font = 'bold 22px JetBrains Mono, monospace';
+      ctx.fillStyle = `rgba(255,255,255,${p.life})`;
+      ctx.fillText(p.text, canvas.width - 14, 54 + i * 28);
+    });
+
     ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   }
 
@@ -260,16 +358,16 @@
     drawBubbles();
 
     if (state === 'idle') {
-      drawSprite(SP.fish, fish.x, canvas.height / 2, 0);
+      drawFish(fish.x, canvas.height / 2, 0, false);
       drawOverlay('> ~/deep-sea', '[ space · enter · tap ] to dive in');
       requestAnimationFrame(loop);
       return;
     }
 
     if (state === 'playing') {
-      const accel = 0.44, maxV = 5;
-      if (keys['ArrowUp']   || keys['KeyW']) fish.vy -= accel;
-      if (keys['ArrowDown'] || keys['KeyS']) fish.vy += accel;
+      const accel = 0.44, maxV = 5 * turbo.up.count;
+      if (keys['ArrowUp']   || keys['KeyW']) fish.vy -= accel * turbo.up.count;
+      if (keys['ArrowDown'] || keys['KeyS']) fish.vy += accel * turbo.down.count;
       if (touchDir !== 0) fish.vy += touchDir * accel;
 
       fish.vy = Math.max(-maxV, Math.min(maxV, fish.vy * 0.87));
@@ -290,10 +388,12 @@
 
       // Collect food
       food.forEach((f) => {
-        if (!f.collected && Math.hypot(fish.x - f.x, fish.y - f.y) < FOOD_R + FISH_R) {
+        const { r, points } = DONUT_SIZES[f.size];
+        if (!f.collected && Math.hypot(fish.x - f.x, fish.y - f.y) < r + FISH_R) {
           f.collected = true;
-          score += 25;
+          score += points;
           spawnCollectParticles(f.x, f.y);
+          popups.push({ text: `+${points}`, life: 1.0 });
         }
       });
       food = food.filter((f) => !f.collected);
@@ -319,6 +419,10 @@
     // Food
     food.forEach(drawFood);
 
+    // Popups
+    popups.forEach((p) => { p.life -= 0.015; });
+    popups = popups.filter((p) => p.life > 0);
+
     // Particles
     particles.forEach((p) => {
       p.x += p.vx; p.y += p.vy;
@@ -339,9 +443,9 @@
 
     // Fish
     if (state === 'playing') {
-      drawSprite(SP.fish, fish.x, fish.y, frame);
+      drawFish(fish.x, fish.y, frame, false);
     } else if (state === 'dead' && particles.length === 0) {
-      drawSprite(SP.fishDead, fish.x, fish.y, 0);
+      drawFish(fish.x, fish.y, 0, true);
     }
 
     drawHUD();
