@@ -8,15 +8,23 @@ Static site: plain HTML, CSS, and JavaScript. No build step, no dependencies.
 
 - `index.html` — page structure and content
 - `style.css` — styling (JetBrains Mono font, terminal/CRT aesthetic)
-- `script.js` — minimal interactivity (blinking cursor, dynamic year)
+- `script.js` — interactivity (typewriter effect, nav highlighting, easter egg trigger)
+- `game.js` — the hidden deep-sea game
+- `favicon.png` — site favicon
+
+## Sections
+
+- **Intro** — name, tagline, and links (the big top section, sometimes called a "hero" in web dev)
+- **About** — bio and skills list
+- **Contact** — email, GitHub, LinkedIn
 
 ## Editing content
 
-All editable sections are marked with `<!-- EDIT: ... -->` comments in `index.html`:
+All editable sections are marked with `<!-- EDIT: ... -->` comments in `index.html`.
 
-- **Hero** — tagline/title
-- **About** — bio, current status, skills list
-- **Contact** — already populated with real links
+## Easter egg
+
+There's a hidden game. Click the **Phish** tag in the skills list to unlock it. Three sizes of donuts float across the screen — smaller ones are worth more points. Double or triple-tap a direction key to move faster.
 
 ## Deployment
 

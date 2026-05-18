@@ -68,11 +68,6 @@
     ctx.textBaseline = 'alphabetic';
   }
 
-  // ── Sprites: food ─────────────────────────────────────────────────────────
-  // Animated with two frames
-  const FOOD_FRAMES = null; // unused — food drawn via canvas
-  const FOOD_R = 10; // collect radius
-
   // ── State ─────────────────────────────────────────────────────────────────
   let state     = 'idle';
   let score     = 0;
@@ -328,21 +323,35 @@
     ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   }
 
-  function drawOverlay(title, sub, note) {
+  function drawOverlay(title, sub, note, large = false) {
     ctx.fillStyle = 'rgba(7,9,16,0.78)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     const cx = canvas.width / 2, cy = canvas.height / 2;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = 'bold 14px JetBrains Mono, monospace';
-    ctx.fillStyle = C.cyan;
-    ctx.fillText(title, cx, cy - 22);
-    ctx.font = '11px JetBrains Mono, monospace';
-    ctx.fillStyle = C.muted;
-    ctx.fillText(sub, cx, cy + 2);
-    if (note) {
-      ctx.font = '10px JetBrains Mono, monospace';
-      ctx.fillStyle = C.purple;
-      ctx.fillText(note, cx, cy + 22);
+    if (large) {
+      ctx.font = 'bold 28px JetBrains Mono, monospace';
+      ctx.fillStyle = C.cyan;
+      ctx.fillText(title, cx, cy - 36);
+      ctx.font = '15px JetBrains Mono, monospace';
+      ctx.fillStyle = C.muted;
+      ctx.fillText(sub, cx, cy + 4);
+      if (note) {
+        ctx.font = '13px JetBrains Mono, monospace';
+        ctx.fillStyle = C.purple;
+        ctx.fillText(note, cx, cy + 30);
+      }
+    } else {
+      ctx.font = 'bold 14px JetBrains Mono, monospace';
+      ctx.fillStyle = C.cyan;
+      ctx.fillText(title, cx, cy - 22);
+      ctx.font = '11px JetBrains Mono, monospace';
+      ctx.fillStyle = C.muted;
+      ctx.fillText(sub, cx, cy + 2);
+      if (note) {
+        ctx.font = '10px JetBrains Mono, monospace';
+        ctx.fillStyle = C.purple;
+        ctx.fillText(note, cx, cy + 22);
+      }
     }
     ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   }
@@ -454,7 +463,8 @@
       drawOverlay(
         `> score  ${String(Math.floor(score)).padStart(5, '0')}`,
         '[ space · enter · tap ] to try again',
-        `your high score: ${String(Math.floor(hiScore)).padStart(5, '0')}  ·  lindy's best: 1,238`
+        `your best: ${String(Math.floor(hiScore)).padStart(5, '0')}  ·  lindy's best: 1,238`,
+        true
       );
     }
 
