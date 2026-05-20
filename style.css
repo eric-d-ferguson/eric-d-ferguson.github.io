@@ -299,6 +299,17 @@ footer {
 #phish-tag {
   cursor: pointer;
   user-select: none;
+  animation: phish-pulse 3.5s ease-in-out infinite;
+}
+
+@keyframes phish-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .45; }
+}
+
+#phish-tag:hover {
+  animation: none;
+  opacity: 1;
 }
 
 /* ── Hidden game ── */
