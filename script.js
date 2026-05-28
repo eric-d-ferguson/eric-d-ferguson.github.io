@@ -21,16 +21,25 @@ const observer = new IntersectionObserver(
 
 sections.forEach((s) => observer.observe(s));
 
-// Phish tag easter egg — click to reveal the game
-const phishTag = document.getElementById('phish-tag');
-const gameShell = document.querySelector('.game-shell');
+// Easter egg games — only one visible at a time
+const woodTag   = document.getElementById('wood-tag');
+const woodShell = document.getElementById('wood-game-shell');
+const phishTag  = document.getElementById('phish-tag');
+const fishShell = document.querySelector('.game-shell:not(#wood-game-shell)');
 
-if (phishTag && gameShell) {
+if (woodTag && woodShell) {
+  woodTag.addEventListener('click', () => {
+    if (fishShell) fishShell.classList.remove('revealed');
+    woodShell.classList.add('revealed');
+    setTimeout(() => woodShell.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+  });
+}
+
+if (phishTag && fishShell) {
   phishTag.addEventListener('click', () => {
-    gameShell.classList.add('revealed');
-    setTimeout(() => {
-      gameShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 150);
+    if (woodShell) woodShell.classList.remove('revealed');
+    fishShell.classList.add('revealed');
+    setTimeout(() => fishShell.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
   });
 }
 

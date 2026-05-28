@@ -9,7 +9,7 @@ Static site: plain HTML, CSS, and JavaScript. No build step, no dependencies.
 - `index.html` — page structure and content
 - `style.css` — styling (JetBrains Mono font, terminal/CRT aesthetic)
 - `script.js` — interactivity (typewriter effect, nav highlighting, easter egg trigger)
-- `game.js` — the hidden deep-sea game
+- `phish-game.js` — the hidden deep-phish game
 - `favicon.png` — site favicon
 
 ## Sections

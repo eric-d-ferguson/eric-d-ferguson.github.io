@@ -368,7 +368,7 @@
 
     if (state === 'idle') {
       drawFish(fish.x, canvas.height / 2, 0, false);
-      drawOverlay('> ~/deep-sea', '[ space · enter · tap ] to dive in');
+      drawOverlay('> ~/deep-phish', '[ space · enter · tap ] to dive in');
       requestAnimationFrame(loop);
       return;
     }

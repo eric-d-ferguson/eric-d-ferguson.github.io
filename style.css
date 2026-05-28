@@ -295,6 +295,31 @@ footer {
 }
 
 
+/* ── Wood easter egg tag ── */
+#wood-tag {
+  cursor: pointer;
+  user-select: none;
+  animation: wood-pulse 4s ease-in-out infinite;
+}
+
+@keyframes wood-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .4; }
+}
+
+#wood-tag:hover {
+  animation: none;
+  opacity: 1;
+}
+
+#wood-game {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  image-rendering: pixelated;
+}
+
 /* ── Phish easter egg tag ── */
 #phish-tag {
   cursor: pointer;
