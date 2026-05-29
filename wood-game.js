@@ -142,13 +142,23 @@
   }
 
   function drawCanopy(cx, trunkTop) {
-    // Three stacked triangles = pine silhouette
+    // Four stacked tiers, each wider and lower, with edge highlights
     const layers = [
-      { baseY: trunkTop + 12, topY: trunkTop - 46, hw: 66, col: '#14532d' },
-      { baseY: trunkTop - 16, topY: trunkTop - 72, hw: 52, col: '#166534' },
-      { baseY: trunkTop - 42, topY: trunkTop - 94, hw: 38, col: '#15803d' },
+      { baseY: trunkTop + 18, topY: trunkTop - 30, hw: 58, col: '#166534', hi: '#22c55e' },
+      { baseY: trunkTop - 10, topY: trunkTop - 58, hw: 44, col: '#15803d', hi: '#4ade80' },
+      { baseY: trunkTop - 34, topY: trunkTop - 78, hw: 32, col: '#166534', hi: '#22c55e' },
+      { baseY: trunkTop - 56, topY: trunkTop - 94, hw: 22, col: '#14532d', hi: '#16a34a' },
     ];
-    layers.forEach(({ baseY, topY, hw, col }) => {
+    layers.forEach(({ baseY, topY, hw, col, hi }) => {
+      // Shadow fill
+      ctx.fillStyle = '#052e16';
+      ctx.beginPath();
+      ctx.moveTo(cx, topY + 4);
+      ctx.lineTo(cx - hw, baseY + 3);
+      ctx.lineTo(cx + hw, baseY + 3);
+      ctx.closePath();
+      ctx.fill();
+      // Main fill
       ctx.fillStyle = col;
       ctx.beginPath();
       ctx.moveTo(cx, topY);
@@ -156,9 +166,16 @@
       ctx.lineTo(cx + hw, baseY);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = '#052e16';
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      // Left-face highlight (light hits from right, left face is lit)
+      ctx.fillStyle = hi;
+      ctx.globalAlpha = 0.25;
+      ctx.beginPath();
+      ctx.moveTo(cx, topY);
+      ctx.lineTo(cx - hw, baseY);
+      ctx.lineTo(cx, baseY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 1;
     });
   }
 
@@ -166,47 +183,78 @@
     const { cx, groundY, trunkW, trunkH, trunkTop, trunkCY, oscRange } = td();
     const lt_ = LOG_TYPES[lti()];
 
-    // Body
-    ctx.fillStyle = lt.trunkCol;
-    ctx.fillRect(cx - trunkW / 2, trunkTop, trunkW, trunkH);
+    // Tapered trunk: slightly wider at base
+    const topW  = trunkW;
+    const botW  = trunkW + 10;
 
-    // Bark texture
+    ctx.fillStyle = lt.trunkCol;
+    ctx.beginPath();
+    ctx.moveTo(cx - topW / 2, trunkTop);
+    ctx.lineTo(cx + topW / 2, trunkTop);
+    ctx.lineTo(cx + botW / 2, groundY);
+    ctx.lineTo(cx - botW / 2, groundY);
+    ctx.closePath();
+    ctx.fill();
+
+    // Right-side shadow
+    ctx.fillStyle = lt.barkCol;
+    ctx.globalAlpha = 0.55;
+    ctx.beginPath();
+    ctx.moveTo(cx + topW * 0.15, trunkTop);
+    ctx.lineTo(cx + topW / 2,    trunkTop);
+    ctx.lineTo(cx + botW / 2,    groundY);
+    ctx.lineTo(cx + botW * 0.15, groundY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Horizontal bark rings
     ctx.strokeStyle = lt.barkCol;
-    ctx.lineWidth = 1.5;
-    for (let bx = cx - trunkW / 2 + 7; bx < cx + trunkW / 2 - 2; bx += 9) {
+    ctx.lineWidth = 1;
+    for (let gy = trunkTop + 14; gy < groundY - 4; gy += 18) {
+      const frac  = (gy - trunkTop) / trunkH;
+      const halfW = topW / 2 + (botW - topW) / 2 * frac;
       ctx.beginPath();
-      ctx.moveTo(bx, trunkTop + 2);
-      ctx.lineTo(bx, groundY - 2);
+      ctx.moveTo(cx - halfW + 2, gy);
+      ctx.bezierCurveTo(cx - halfW / 2, gy + 4, cx + halfW / 2, gy + 4, cx + halfW - 2, gy);
       ctx.stroke();
     }
 
     // Outline
     ctx.strokeStyle = C.bark;
     ctx.lineWidth = 2.5;
-    ctx.strokeRect(cx - trunkW / 2, trunkTop, trunkW, trunkH);
+    ctx.beginPath();
+    ctx.moveTo(cx - topW / 2, trunkTop);
+    ctx.lineTo(cx + topW / 2, trunkTop);
+    ctx.lineTo(cx + botW / 2, groundY);
+    ctx.lineTo(cx - botW / 2, groundY);
+    ctx.closePath();
+    ctx.stroke();
 
     // Sweet zone
     const zoneH   = 2 * lt_.sweetFrac * oscRange;
     const zoneTop = trunkCY - zoneH / 2;
 
-    ctx.fillStyle = `rgba(251,191,36,${sweetAlpha * 0.42})`;
-    ctx.fillRect(cx - trunkW / 2 + 1, zoneTop, trunkW - 2, zoneH);
+    ctx.fillStyle = `rgba(251,191,36,${sweetAlpha * 0.35})`;
+    ctx.fillRect(cx - topW / 2, zoneTop, topW, zoneH);
 
-    // Zone border lines extending outside the trunk for visibility
+    // Zone border lines extending outside the trunk
     const ext = 14;
-    ctx.strokeStyle = `rgba(251,191,36,${sweetAlpha * 0.95})`;
+    ctx.strokeStyle = `rgba(251,191,36,${sweetAlpha * 0.9})`;
     ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
     ctx.beginPath();
-    ctx.moveTo(cx - trunkW / 2 - ext, zoneTop);
-    ctx.lineTo(cx + trunkW / 2 + ext, zoneTop);
+    ctx.moveTo(cx - topW / 2 - ext, zoneTop);
+    ctx.lineTo(cx + topW / 2 + ext, zoneTop);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(cx - trunkW / 2 - ext, zoneTop + zoneH);
-    ctx.lineTo(cx + trunkW / 2 + ext, zoneTop + zoneH);
+    ctx.moveTo(cx - topW / 2 - ext, zoneTop + zoneH);
+    ctx.lineTo(cx + topW / 2 + ext, zoneTop + zoneH);
     ctx.stroke();
+    ctx.setLineDash([]);
 
-    // ▶ arrow on left side pointing to sweet zone (since axe comes from left)
-    const arrowX = cx - trunkW / 2 - ext - 18;
+    // ▶ arrow pointing to sweet zone
+    const arrowX = cx - topW / 2 - ext - 18;
     const arrowY = trunkCY;
     ctx.fillStyle = `rgba(251,191,36,${sweetAlpha * 0.95})`;
     ctx.beginPath();
@@ -216,72 +264,162 @@
     ctx.closePath();
     ctx.fill();
 
-    // Ground shadow
-    ctx.strokeStyle = 'rgba(90,100,120,0.3)';
-    ctx.lineWidth = 1;
+    // Ground shadow ellipse
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.beginPath();
-    ctx.moveTo(0, groundY + 3);
-    ctx.lineTo(canvas.width, groundY + 3);
-    ctx.stroke();
+    ctx.ellipse(cx, groundY + 4, botW / 2 + 6, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   function drawAxeAt(pos, lt, lunge) {
     const { cx, trunkW } = td();
     const ay      = axeY(pos);
     const inSweet = Math.abs(pos) < lt.sweetFrac;
-    const col     = inSweet ? C.sweet : C.axe;
+    const steelCol  = inSweet ? '#fbbf24' : '#b0bec5';
+    const steelHi   = inSweet ? '#fef08a' : '#eceff1';
+    const steelSide = inSweet ? '#92400e' : '#546e7a';
 
-    // Axe to the left of trunk; lunge moves it right toward trunk
-    const bladeX    = cx - trunkW / 2 - 6 + lunge;
-    const handleLen = 84;
+    // bitX = right edge of axe head (cutting edge, nearest tree)
+    const bitX  = cx - trunkW / 2 - 10 + lunge;
 
-    // Handle (slight upward angle)
-    ctx.strokeStyle = '#8B4513';
-    ctx.lineWidth   = 5;
+    // Head dimensions — classic felling axe proportions:
+    //   bit (cutting edge) is tall and sits on the right
+    //   head widens from eye/poll toward the bit
+    //   top edge sweeps forward-upward (toe), bottom sweeps forward-downward (heel)
+    const bitH    = 46;  // total height of cutting edge
+    const headW   = 34;  // depth of head (poll to bit)
+    const pollH   = 14;  // height of poll face (much shorter than bit)
+
+    const toeX  = bitX,      toeY  = ay - bitH / 2;   // top of cutting edge
+    const heelX = bitX,      heelY = ay + bitH / 2;   // bottom of cutting edge
+    const pollX = bitX - headW;
+    const pollTopY = ay - pollH / 2;
+    const pollBotY = ay + pollH / 2;
+
+    // Control points for the sweeping top/bottom edges
+    // Top edge: from pollTop → curves outward → toe  (convex upward)
+    const topCtlX = pollX + headW * 0.55, topCtlY = toeY - 6;
+    // Bottom edge: from pollBot → curves outward → heel (convex downward)
+    const botCtlX = pollX + headW * 0.55, botCtlY = heelY + 6;
+
+    // ── Handle (haft) ────────────────────────────────────────────────
+    // Runs through eye (middle of head), extends ~90px to the left with slight downward belly
+    const eyeX = pollX + 8;
+    const eyeY = ay;
+    const buttX = eyeX - 86;
+    const buttY = eyeY + 14;  // slight downward belly
+
+    // Shadow
+    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    ctx.lineWidth   = 9;
     ctx.lineCap     = 'round';
     ctx.beginPath();
-    ctx.moveTo(bladeX - handleLen, ay + 10);
-    ctx.lineTo(bladeX, ay - 2);
+    ctx.moveTo(buttX + 2, buttY + 3);
+    ctx.quadraticCurveTo(eyeX - 36 + 2, eyeY + 8 + 3, eyeX + 2, eyeY + 3);
+    ctx.stroke();
+
+    // Haft body — gradient from dark end to lighter grip area
+    const haftGrad = ctx.createLinearGradient(buttX, eyeY, buttX + 10, eyeY);
+    haftGrad.addColorStop(0,   '#5a2008');
+    haftGrad.addColorStop(0.5, '#9a4a1c');
+    haftGrad.addColorStop(1,   '#7a3612');
+    ctx.strokeStyle = haftGrad;
+    ctx.lineWidth   = 7;
+    ctx.beginPath();
+    ctx.moveTo(buttX, buttY);
+    ctx.quadraticCurveTo(eyeX - 36, eyeY + 8, eyeX, eyeY);
+    ctx.stroke();
+
+    // Grain lines on handle
+    ctx.strokeStyle = 'rgba(60,20,5,0.45)';
+    ctx.lineWidth   = 1;
+    for (let t = 0.15; t < 0.85; t += 0.2) {
+      const hx = buttX + (eyeX - buttX) * t;
+      const hy = buttY + (eyeY - buttY) * t + 6 * Math.sin(Math.PI * t);
+      ctx.beginPath();
+      ctx.moveTo(hx - 4, hy - 2); ctx.lineTo(hx + 4, hy + 2); ctx.stroke();
+    }
+
+    // Palm swell (knob at butt end)
+    ctx.fillStyle = '#5a2008';
+    ctx.beginPath();
+    ctx.ellipse(buttX, buttY, 6, 4, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#3a1205';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.lineCap = 'butt';
+
+    // ── Axe head ────────────────────────────────────────────────────
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.beginPath();
+    ctx.moveTo(pollX + 3,  pollTopY + 3);
+    ctx.quadraticCurveTo(topCtlX + 3, topCtlY + 3, toeX + 3, toeY + 3);
+    ctx.lineTo(heelX + 3, heelY + 3);
+    ctx.quadraticCurveTo(botCtlX + 3, botCtlY + 3, pollX + 3, pollBotY + 3);
+    ctx.closePath();
+    ctx.fill();
+
+    // Main head — steel face (lighter, facing viewer)
+    ctx.fillStyle = steelCol;
+    ctx.beginPath();
+    ctx.moveTo(pollX,  pollTopY);
+    ctx.quadraticCurveTo(topCtlX, topCtlY, toeX, toeY);   // top sweep to toe
+    ctx.lineTo(heelX, heelY);                               // cutting edge (bit)
+    ctx.quadraticCurveTo(botCtlX, botCtlY, pollX, pollBotY); // bottom sweep to heel
+    ctx.closePath();
+    ctx.fill();
+
+    // Top bevel — slightly lighter upper half to show the cheek
+    const bevelGrad = ctx.createLinearGradient(pollX, pollTopY, pollX, ay);
+    bevelGrad.addColorStop(0, inSweet ? 'rgba(255,240,100,0.45)' : 'rgba(220,230,240,0.45)');
+    bevelGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = bevelGrad;
+    ctx.beginPath();
+    ctx.moveTo(pollX,  pollTopY);
+    ctx.quadraticCurveTo(topCtlX, topCtlY, toeX, toeY);
+    ctx.lineTo(bitX, ay);
+    ctx.lineTo(pollX, ay);
+    ctx.closePath();
+    ctx.fill();
+
+    // Head outline
+    ctx.strokeStyle = steelSide;
+    ctx.lineWidth   = 2;
+    ctx.beginPath();
+    ctx.moveTo(pollX,  pollTopY);
+    ctx.quadraticCurveTo(topCtlX, topCtlY, toeX, toeY);
+    ctx.lineTo(heelX, heelY);
+    ctx.quadraticCurveTo(botCtlX, botCtlY, pollX, pollBotY);
+    ctx.closePath();
+    ctx.stroke();
+
+    // Poll face (flat back of head) — darker to look like the back face
+    ctx.fillStyle = steelSide;
+    ctx.fillRect(pollX - 5, pollTopY, 6, pollBotY - pollTopY);
+    ctx.strokeStyle = '#263238';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(pollX - 5, pollTopY, 6, pollBotY - pollTopY);
+
+    // Cutting edge glint — thin bright line right on the bit
+    ctx.strokeStyle = steelHi;
+    ctx.lineWidth   = 2.5;
+    ctx.lineCap     = 'round';
+    ctx.beginPath();
+    ctx.moveTo(toeX, toeY + 5);
+    ctx.lineTo(heelX, heelY - 5);
     ctx.stroke();
     ctx.lineCap = 'butt';
 
-    // Grip knob
-    ctx.fillStyle = '#5a2d0c';
+    // Eye hole — oval where handle passes through head
+    ctx.fillStyle = inSweet ? '#78350f' : '#1c2833';
     ctx.beginPath();
-    ctx.ellipse(bladeX - handleLen - 2, ay + 11, 5, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(eyeX + 4, eyeY, 5, 8, 0, 0, Math.PI * 2);
     ctx.fill();
-
-    // Axe head: D-shape, blade edge facing right (toward trunk)
-    const s = 20;
-    ctx.fillStyle = col;
-    ctx.beginPath();
-    ctx.moveTo(bladeX - s * 0.1, ay - s * 0.55);         // top-back
-    ctx.bezierCurveTo(
-      bladeX + s * 0.4,  ay - s * 0.85,
-      bladeX + s * 0.95, ay - s * 0.4,
-      bladeX + s * 0.9,  ay                               // mid-blade tip
-    );
-    ctx.bezierCurveTo(
-      bladeX + s * 0.95, ay + s * 0.4,
-      bladeX + s * 0.4,  ay + s * 0.85,
-      bladeX - s * 0.1,  ay + s * 0.55                   // bottom-back
-    );
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = inSweet ? '#92400e' : '#334155';
-    ctx.lineWidth   = 1.5;
-    ctx.stroke();
-
-    // Blade-edge sheen
-    ctx.strokeStyle = inSweet ? 'rgba(255,255,200,0.5)' : 'rgba(200,210,224,0.35)';
-    ctx.lineWidth   = 1;
-    ctx.beginPath();
-    ctx.moveTo(bladeX + s * 0.6, ay - s * 0.28);
-    ctx.bezierCurveTo(
-      bladeX + s * 0.8,  ay - s * 0.1,
-      bladeX + s * 0.8,  ay + s * 0.1,
-      bladeX + s * 0.6,  ay + s * 0.28
-    );
+    ctx.strokeStyle = steelSide;
+    ctx.lineWidth = 1;
     ctx.stroke();
   }
 
