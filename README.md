@@ -22,9 +22,12 @@ Static site: plain HTML, CSS, and JavaScript. No build step, no dependencies.
 
 All editable sections are marked with `<!-- EDIT: ... -->` comments in `index.html`.
 
-## Easter egg
+## Easter Egg Links
 
-There's a hidden game. Click the **Phish** tag in the skills list to unlock it. Three sizes of donuts float across the screen — smaller ones are worth more points. Double or triple-tap a direction key to move faster.
+Two tags in the skills list do more than sit there:
+
+- **Phish** — unlocks a hidden game. Three sizes of donuts float across the screen; smaller ones are worth more points. Double or triple-tap a direction key to move faster.
+- **Wood** — links out to the [cut-optimizer](https://eric-d-ferguson.github.io/cut-optimizer/) project ([source](https://github.com/eric-d-ferguson/cut-optimizer)).
 
 ## Deployment
 
