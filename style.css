@@ -295,11 +295,15 @@ footer {
 }
 
 
-/* ── Wood easter egg tag ── */
+/* ── Wood tag → cut-optimizer link ── */
 #wood-tag {
-  cursor: pointer;
   user-select: none;
   animation: wood-pulse 4s ease-in-out infinite;
+}
+
+#wood-tag a {
+  color: inherit;
+  text-decoration: none;
 }
 
 @keyframes wood-pulse {
@@ -310,14 +314,6 @@ footer {
 #wood-tag:hover {
   animation: none;
   opacity: 1;
-}
-
-#wood-game {
-  display: block;
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  image-rendering: pixelated;
 }
 
 /* ── Phish easter egg tag ── */
