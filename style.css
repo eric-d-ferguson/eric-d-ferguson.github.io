@@ -318,9 +318,13 @@ footer {
 
 /* ── Phish easter egg tag ── */
 #phish-tag {
-  cursor: pointer;
   user-select: none;
   animation: phish-pulse 3.5s ease-in-out infinite;
+}
+
+#phish-tag a {
+  color: inherit;
+  text-decoration: none;
 }
 
 @keyframes phish-pulse {
