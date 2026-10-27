@@ -7,10 +7,11 @@ Personal site for Eric D Ferguson — hosted on GitHub Pages.
 Static site: plain HTML, CSS, and JavaScript. No build step, no dependencies.
 
 - `index.html` — page structure and content
-- `style.css` — styling (JetBrains Mono font, terminal/CRT aesthetic)
-- `script.js` — interactivity (typewriter effect, nav highlighting)
+- `style.css` — styling (Inter font, light theme with automatic dark mode)
+- `script.js` — interactivity (footer year, nav highlighting)
 - `phish-game.js` — dormant hidden game, no longer wired up (see below)
 - `favicon.png` — site favicon
+- `og-image.png` — 1200×630 link-preview image used by the Open Graph tags
 
 ## Sections
 
