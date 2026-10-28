@@ -212,6 +212,14 @@ h2 {
   color: var(--text);
 }
 
+.hands-on {
+  margin-top: 1rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+.side-projects { margin-top: 1rem; }
+
 .tag-list li.tag-link { border-color: var(--accent); }
 .tag-list li.tag-link a { color: var(--accent); }
 .tag-list li.tag-link a::after { content: ' ↗'; font-size: .75em; }
