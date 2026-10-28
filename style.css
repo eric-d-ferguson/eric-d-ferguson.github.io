@@ -218,11 +218,14 @@ h2 {
   color: var(--muted);
 }
 
-.side-projects { margin-top: 1rem; }
-
-.tag-list li.tag-link { border-color: var(--accent); }
-.tag-list li.tag-link a { color: var(--accent); }
-.tag-list li.tag-link a::after { content: ' ↗'; font-size: .75em; }
+.about-text a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.about-text a:hover { color: var(--accent); opacity: 1; }
 
 /* ── Contact ── */
 #contact p { margin-bottom: 1.25rem; }

@@ -25,10 +25,10 @@ All editable sections are marked with `<!-- EDIT: ... -->` comments in `index.ht
 
 ## Project Links
 
-Two side-project links under the personal paragraph in About point to other projects:
+Two phrases in the personal paragraph in About link out to other projects:
 
-- **Phish** — links to [my-phish-stats](https://eric-d-ferguson.github.io/my-phish-stats/) ([source](https://github.com/eric-d-ferguson/my-phish-stats)), a static page of stats pulled from my phish.net show history.
-- **Wood** — links out to the [cut-optimizer](https://eric-d-ferguson.github.io/cut-optimizer/) project ([source](https://github.com/eric-d-ferguson/cut-optimizer)).
+- **"live music"** — links to [my-phish-stats](https://eric-d-ferguson.github.io/my-phish-stats/) ([source](https://github.com/eric-d-ferguson/my-phish-stats)), a static page of stats pulled from my phish.net show history.
+- **"woodworker"** — links out to the [cut-optimizer](https://eric-d-ferguson.github.io/cut-optimizer/) project ([source](https://github.com/eric-d-ferguson/cut-optimizer)).
 
 ### Dormant easter egg
 
